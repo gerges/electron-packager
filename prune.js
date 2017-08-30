@@ -18,10 +18,17 @@ function pruneCommand (packageManager) {
 
 function pruneModules (opts, appPath, cb) {
   if (opts.packageManager === false) {
+    debug(`Pruning modules via: pruner`);
     const walker = new Walker(appPath)
     walker.prune()
-      .then(() => cb())
-      .catch((err) => cb(err))
+      .then(() => {
+        debug(`Pruning completed without errors`);
+        cb();
+      })
+      .catch((err) => {
+        debug(`Pruning completed with error: ${err}`);
+        cb(err);
+      });
   } else {
     const packageManager = opts.packageManager || 'npm'
 
